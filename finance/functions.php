@@ -4,7 +4,10 @@ require("bootstrap.php");
 function get_addressbook_by_nick($nick) {
     global $entityManager;
     $addressbook = $entityManager->getRepository('Addressbook')->findOneBy(array('nick' => $nick));
-    return $addressbook->getId();
+    if (!$addressbook) {
+        return null; 
+    } else
+        return $addressbook->getId();
 }
 
 function get_user_dept($addressbook_id) {

@@ -11,6 +11,7 @@ if (isset($_POST['name']) && isset($_POST['nick'])) {
     $addressbook = new Addressbook();
     $addressbook->setName($_POST['name']);
     $addressbook->setNick($_POST['nick']);
+    $addressbook->setAddress(' ');
     $entityManager->persist($addressbook);
     $entityManager->flush();
 }

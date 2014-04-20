@@ -38,21 +38,21 @@ class Addressbook
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255, nullable=false)
+     * @ORM\Column(name="address", type="string", length=255, nullable=true)
      */
     private $address;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="postcode", type="string", length=10, nullable=false)
+     * @ORM\Column(name="postcode", type="string", length=10, nullable=true)
      */
     private $postcode;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=255, nullable=false)
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
      */
     private $city;
 
@@ -95,5 +95,13 @@ class Addressbook
     public function setNick($nick)
     {
         $this->nick = $nick;
+    }
+    
+    public function setAddress($address) {
+        $this->address = $address;
+    }
+
+    public function setPostcode($postcode) {
+        $this->postcode = $postcode;
     }
 }
