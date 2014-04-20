@@ -14,6 +14,13 @@ if (isset($_GET['set_accepted'])) {
     $entityManager->flush();
 }
 
+if (isset($_GET['unset_accepted'])) {
+    $claim = $entityManager->getRepository('Claim')->findOneBy(array('id'=>$_GET['unset_accepted']));
+    $claim->setAccepted(false);
+    $entityManager->persist($claim);
+    $entityManager->flush();
+}
+
 
 if (isset($_GET['set_paid'])) {
     $claim = $entityManager->getRepository('Claim')->findOneBy(array('id'=>$_GET['set_paid']));
@@ -66,6 +73,13 @@ AddressBook<select name="addressbook_id">
 </form>
 <h2>Open claims</h2>
 <table id="hor-minimalist-b">
+<tr>
+    <th>Date</th>
+    <th>Descr</th>
+    <th>Amount</th>
+    <th>Name</th>
+    <th>Nick</th>
+</tr>
 <?
 $claims = $entityManager->getRepository('Claim')->findBy(array('paid'=>0),array('date'=>'desc'));
 foreach ($claims as $claim) {
@@ -76,7 +90,12 @@ foreach ($claims as $claim) {
     <td><?=$claim->getAmount()?></td>
     <td><?=$claim->getAddressbook()->getName()?></td>
     <td><?=$claim->getAddressbook()->getNick()?></td>
-    <td><a href="claims.php?set_accepted=<?=$claim->getId()?>">Accept</a></td></tr>
+    <td><?
+if ($claim->getAccepted()) {?>
+<a href="claims.php?unset_accepted=<?=$claim->getId()?>">Unaccept</a></td>
+<?}else{?>
+<a href="claims.php?set_accepted=<?=$claim->getId()?>">Accept</a></td>
+<?}?>
     <td><a href="claims.php?set_paid=<?=$claim->getId()?>">Set Paid</a></td></tr>
 <?
 }

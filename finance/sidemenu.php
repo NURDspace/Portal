@@ -3,6 +3,7 @@
 <ul>
 <li><a href="index.php">Home</a></li>
 <?if (has_role("finance")) {?><li><a href="addressbook.php">Addressbook</a></li><?}?>
+<?if (has_role("finance")) {?><li><a href="claims.php">Claims</a></li><?}?>
 <?if (has_role("finance")) {?><li><a href="invoices.php">Invoices</a></li><?}?>
 <?if (has_role("finance")) {?><li><a href="subscriptions.php">Subscriptions</a></li><?}?>
 <?if (has_role("finance")) {?><li><a href="transactions.php">Transactions</a></li><?}?>

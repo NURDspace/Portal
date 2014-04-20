@@ -27,6 +27,16 @@ function select_openinvoices() {
     return $output;
 }
 
+function select_openclaims() {
+    global $entityManager;
+    $output = "";
+    $claims = $entityManager->getRepository('Claim')->findBy(array('paid'=>0,'accepted'=>1));
+    foreach ($claims as $claim) {
+        $output = $output . "<option value=\"{$claim->getId()}\">{$claim->getDate()} {$claim->getAddressbook()->getNick()} ({$claim->getAddressbook()->getName()}) - {$claim->getDescr()} ({$claim->getAmount()})</option>";
+    }
+    return $output;
+}
+
 function get_addressbook(){
     global $entityManager;
     $output = array();

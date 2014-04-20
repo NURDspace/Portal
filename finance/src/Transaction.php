@@ -78,7 +78,7 @@ class Transaction
     */
     private $invoices;
 
-    /** @ORM\ManyToMany(targetEntity="Transaction")
+    /** @ORM\ManyToMany(targetEntity="Claim")
      *  @ORM\JoinTable(name="claim_transaction",
      *      joinColumns={@ORM\JoinColumn(name="transaction_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="claim_id", referencedColumnName="id")}

@@ -25,6 +25,23 @@ if (isset($_POST['transaction_id']) && isset($_POST['invoice_id'])) {
             }
         }
     }
+    foreach ($_POST['claim_id'] as $key => $claim_id){
+        $transaction_id = $_POST['transaction_id'][$key];
+        if ($claim_id != 0 && $transaction_id != 0) {
+            $claim = $entityManager->getRepository('Claim')->findOneBy(array('id'=>$claim_id));
+            $transaction = $entityManager->getRepository('Transaction')->findOneBy(array('id'=>$transaction_id));
+            $transaction->getClaims()->add($claim);
+            $entityManager->persist($transaction);
+            $entityManager->flush();
+
+            if (($transaction->getAmount() - $claim->getAmount()) >= 0) {
+                $claim->setPaid(1);
+                $claim->setPaidDate($transaction->getDate());
+                $entityManager->persist($claim);
+                $entityManager->flush();
+            }
+        }
+    }
 }
 ?>
 <html>
@@ -70,9 +87,24 @@ foreach ($transactions as $line) {
 <tr><td colspan="6">
 <nobr>
 <input type="hidden" name="transaction_id[]" value="<?=$line->getId()?>">
+<input type="hidden" name="claim_id[]" value="0">
 <select name="invoice_id[]">
 <option value="0">Nothing selected</option>
 <?=select_openinvoices()?>
+</select>
+<input type="submit">
+</nobr>
+</td></tr>
+<?
+}
+if ($line->getCdtDbt() == "DBIT" && !$transaction_booked) {?>
+<tr><td colspan="6">
+<nobr>
+<input type="hidden" name="transaction_id[]" value="<?=$line->getId()?>">
+<input type="hidden" name="invoice_id[]" value="0">
+<select name="claim_id[]">
+<option value="0">Nothing selected</option>
+<?=select_openclaims()?>
 </select>
 <input type="submit">
 </nobr>
