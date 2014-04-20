@@ -57,7 +57,8 @@ foreach ($import->BkToCstmrStmt->Stmt as $stmt) {
             $account = (isset($Ntry->NtryDtls->TxDtls->RltdPties->DbtrAcct->Id->IBAN))?$Ntry->NtryDtls->TxDtls->RltdPties->DbtrAcct->Id->IBAN:$Ntry->NtryDtls->TxDtls->RltdPties->DbtrAcct->Id->Othr->Id;
         }else{
             $name = $Ntry->NtryDtls->TxDtls->RltdPties->Cdtr->Nm;
-            $account = (isset($Ntry->NtryDtls->TxDtls->RltdPties->CdtrAcct->Id->IBAN))?$Ntry->NtryDtls->TxDtls->RltdPties->CdtrAcct->Id->IBAN:$Ntry->NtryDtls->TxDtls->RltdPties->CdtrAcct->Id->Othr->Id;
+            if (isset($Ntry->NtryDtls->TxDtls->RltdPties->CdtrAcct->Id->Othr->Id)) {
+                $account = (isset($Ntry->NtryDtls->TxDtls->RltdPties->CdtrAcct->Id->IBAN))?$Ntry->NtryDtls->TxDtls->RltdPties->CdtrAcct->Id->IBAN:$Ntry->NtryDtls->TxDtls->RltdPties->CdtrAcct->Id->Othr->Id;         }else{ $account = ""; }
         }
         $desc = $Ntry->NtryDtls->TxDtls->AddtlTxInf; 
 ?>
