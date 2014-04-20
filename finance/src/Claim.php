@@ -31,16 +31,19 @@ class Claim
     /**
      * @var integer
      *
-     * @ORM\Column(name="addressbook_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Addressbook" , inversedBy="claims")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="addressbook_id", referencedColumnName="id")
+     * })
      */
-    private $addressbookId;
+    private $addressbook;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="desc", type="string", length=255, nullable=false)
+     * @ORM\Column(name="descr", type="string", length=255, nullable=false)
      */
-    private $desc;
+    private $descr;
 
     /**
      * @var string
@@ -49,5 +52,91 @@ class Claim
      */
     private $amount;
 
+    /** @ORM\ManyToMany(targetEntity="Transaction")
+     *  @ORM\JoinTable(name="claim_transaction",
+     *      joinColumns={@ORM\JoinColumn(name="claim_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="transaction_id", referencedColumnName="id")}
+     *      )
+     */
+    private $transactions;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="paid", type="boolean", nullable=false)
+     */
+    private $paid;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="paid_date", type="date", nullable=true)
+     */
+    private $paidDate;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="accepted", type="boolean", nullable=false)
+     */
+    private $accepted;
+
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setAddressbook(Addressbook $address) {
+        $this->addressbook = $address;
+    }
+
+    public function getAddressbook() {
+        return $this->addressbook;
+    }
+
+    public function getDate() {
+        return $this->date->format('Y-m-d');
+    }
+
+    public function setDate($date) {
+        $this->date = new DateTime($date);
+    }
+
+    public function getDescr() {
+        return $this->descr;
+    }
+
+    public function setDescr($descr) {
+        $this->descr = $descr;
+    }
+
+    public function getAmount() {
+        return $this->amount;
+    }
+
+    public function setAmount($amount) {
+        $this->amount = $amount;
+    }
+    public function getPaidDate() {
+        return $this->paidDate->format('Y-m-d');
+    }
+
+    public function setPaidDate($paiddate) {
+        $this->paidDate = new DateTime($paiddate);
+    }
+
+    public function getPaid() {
+        return $this->paid;
+    }
+
+    public function setPaid($paid) {
+        $this->paid = $paid;
+    }
+
+    public function getAccepted() {
+        return $this->accepted;
+    }
+    
+    public function setAccepted($accepted) {
+        $this->accepted = $accepted;
+    }
 }

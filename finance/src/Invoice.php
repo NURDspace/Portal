@@ -67,7 +67,7 @@ class Invoice
     /**
      * @var \Addressbook
      *
-     * @ORM\ManyToOne(targetEntity="Addressbook" , inversedBy="Invoices")
+     * @ORM\ManyToOne(targetEntity="Addressbook" , inversedBy="invoices")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="addressbook_id", referencedColumnName="id")
      * })

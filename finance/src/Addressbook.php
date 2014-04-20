@@ -64,6 +64,13 @@ class Addressbook
      */
     private $invoices;
 
+    /**
+     * Bidirectional - One-To-Many (INVERSE SIDE)
+     *
+     * @ORM\OneToMany(targetEntity="Claim", mappedBy="addressbook")
+     */
+    private $claims;
+
     public function getInvoices() {
         return $this->invoices;
     }

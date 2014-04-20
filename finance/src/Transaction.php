@@ -78,14 +78,28 @@ class Transaction
     */
     private $invoices;
 
+    /** @ORM\ManyToMany(targetEntity="Transaction")
+     *  @ORM\JoinTable(name="claim_transaction",
+     *      joinColumns={@ORM\JoinColumn(name="transaction_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="claim_id", referencedColumnName="id")}
+     *      )
+     */
+    private $claims;
+
     public function __construct()
     {
         $this->invoices = new ArrayCollection();
+        $this->claims = new ArrayCollection();
     }
 
     public function getInvoices()
     {
         return $this->invoices;
+    }
+
+    public function getClaims()
+    {
+        return $this->claims;
     }
 
     public function getId() {
