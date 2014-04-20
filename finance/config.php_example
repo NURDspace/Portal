@@ -1,0 +1,9 @@
+<?
+$connectionParams = array(
+    'dbname' => 'memberportal',
+    'user' => 'memberportal',
+    'password' => 'password',
+    'host' => 'localhost',
+    'driver' => 'pdo_mysql',
+);
+?>

@@ -1,0 +1,3 @@
+<?
+$dbconn = pg_connect("host=bar dbname=nurdbar user=userportal password=password")
+    or die('Could not connect: ' . pg_last_error());
