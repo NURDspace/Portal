@@ -14,12 +14,12 @@ if (isset($_GET['generate'])){
     $qb->where('s.endDate = \'0000-00-00\' and s.startDate < :startDate');
     $qb->setParameter('startDate',$datenow->format('Y-m-d'));
     $subscriptions = $qb->getQuery()->getResult();
-    foreach ($subscriptions as $line) { 
-        if ($line->getLastInvoiceDate() == '0000-00-00') {
-            $line_5 = explode('-',$line->startDate());
-            $last_subs_date = $line_5[0]."-".($line_5[1]-1)."-".$line_5[2];
+    foreach ($subscriptions as $subscription) { 
+        if ($subscription->getLastInvoiceDate() == '0000-00-00') {
+            $_start_date = explode('-',$subscription->startDate());
+            $last_subs_date = $_start_date[0]."-".($_start_date[1]-1)."-".$_start_date[2];
         } else
-            $last_subs_date = $line->getLastInvoiceDate(); 
+            $last_subs_date = $subscription->getLastInvoiceDate(); 
         $diff = abs(strtotime("now") - strtotime($last_subs_date));
         $years = floor($diff / (365*60*60*24));
         $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
@@ -31,13 +31,13 @@ if (isset($_GET['generate'])){
                 $invoice = new Invoice();
                 $invoice->setDate(date("Y-m-d"));
                 $invoice->setAddressbook();
-                $invoice->setDescr('Subscription invoice '.date("F Y",$invoice_month)." {$line->getDescr()}");
-                $invoice->setAmount($line->getAmount);
-                $invoice->setSubscription($line);
+                $invoice->setDescr('Subscription invoice '.date("F Y",$invoice_month)." {$subscription->getDescr()}");
+                $invoice->setAmount($subscription->getAmount);
+                $invoice->setSubscription($subscription);
                 $entityManager->persist($invoice);
                 $entityManager->flush();
-                $line->setLastInvoiceDate(date("Y-m-d"));
-                $entityManager->persist($line);
+                $subscription->setLastInvoiceDate(date("Y-m-d"));
+                $entityManager->persist($subscription);
                 $entityManager->flush();
             }
         }
