@@ -15,8 +15,8 @@ if (isset($_GET['generate'])){
     $qb->setParameter('startDate',$datenow->format('Y-m-d'));
     $subscriptions = $qb->getQuery()->getResult();
     foreach ($subscriptions as $subscription) { 
-        if ($subscription->getLastInvoiceDate() == '0000-00-00') {
-            $_start_date = explode('-',$subscription->startDate());
+        if ($subscription->getLastInvoiceDate() == '-0001-11-30') {
+            $_start_date = explode('-',$subscription->getStartDate());
             $last_subs_date = $_start_date[0]."-".($_start_date[1]-1)."-".$_start_date[2];
         } else
             $last_subs_date = $subscription->getLastInvoiceDate(); 
@@ -30,10 +30,11 @@ if (isset($_GET['generate'])){
                 $invoice_month = mktime(0, 0, 0, $last_invoice_date[1]+$i, $last_invoice_date[2],  $last_invoice_date[0]);
                 $invoice = new Invoice();
                 $invoice->setDate(date("Y-m-d"));
-                $invoice->setAddressbook();
+                $invoice->setAddressbook($subscription->getAddressbook());
                 $invoice->setDescr('Subscription invoice '.date("F Y",$invoice_month)." {$subscription->getDescr()}");
-                $invoice->setAmount($subscription->getAmount);
+                $invoice->setAmount($subscription->getAmount());
                 $invoice->setSubscription($subscription);
+                $invoice->setPaid(false);
                 $entityManager->persist($invoice);
                 $entityManager->flush();
                 $subscription->setLastInvoiceDate(date("Y-m-d"));

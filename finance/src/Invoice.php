@@ -84,7 +84,7 @@ class Invoice
 
     public function __construct()
     {
-        $this->transactions = new ArrayCollection();
+        $this->transactions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getTransactions()
