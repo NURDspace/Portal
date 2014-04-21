@@ -86,4 +86,19 @@ function transaction_crdt_booked($transaction_id) {
         return false;
 }
 
+function transaction_dbit_booked($transaction_id) {
+    global $entityManager;
+    $transaction = $entityManager->getRepository('Transaction')->findOneBy(array('id'=>$transaction_id));
+    $transaction_amount = $transaction->getAmount(); 
+    $claim_amount = 0.00;
+    $claims = $transaction->getClaims();
+    foreach ($claims as $claim) {
+        $claim_amount = $claim_amount + $claim->getAmount();
+    }
+    if (($transaction->getAmount() - $claim_amount) == 0)
+        return true;
+    else
+        return false;
+}
+
 ?>

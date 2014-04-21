@@ -9,8 +9,7 @@ exit();
 }
 
 if (isset($_POST['start_date']) && isset($_POST['amount'])) {
-    $address = $entityManager->getRepository('Addressbook')->findOneBy(array('id'=>$_POST['addressboo
-k_id']));
+    $address = $entityManager->getRepository('Addressbook')->findOneBy(array('id'=>$_POST['addressbook_id']));
     $subscription = new Subscription();
     $subscription->setStartDate($_POST['start_date']);
     $subscription->setAmount($_POST['amount']);
@@ -63,7 +62,7 @@ omschrijving: <input name="descr" maxlength="255">
 <?
 $subscriptionsRepo = $entityManager->getRepository('Subscription');
 $qb = $subscriptionsRepo->createQueryBuilder('s');
-$qb->where('s.endDate = \'0000-00-00\'');
+$qb->where('s.endDate = \'0000-00-00\' OR s.endDate IS NULL');
 $subscriptions = $qb->getQuery()->getResult();
 foreach ($subscriptions as $line) {
 ?>
@@ -85,14 +84,14 @@ foreach ($subscriptions as $line) {
 <?
 $subscriptionsRepo = $entityManager->getRepository('Subscription');
 $qb = $subscriptionsRepo->createQueryBuilder('s');
-$qb->where('s.endDate != \'0000-00-00\'');
+$qb->where('s.endDate > \'0000-00-00\'');
 $subscriptions = $qb->getQuery()->getResult();
 foreach ($subscriptions as $line) {
 ?>
 <tr>
-    <td><?=$line->startDate()?></td>
+    <td><?=$line->getStartDate()?></td>
     <td><?=$line->getLastInvoiceDate()?></td>
-    <td><?=$line->endDate()?></td>
+    <td><?=$line->getEndDate()?></td>
     <td><?=$line->getAddressbook()->getName()?> (<?=$line->getAddressbook()->getNick()?>)</td>
     <td><?=$line->getAmount()?></td>
     <td><?=$line->getDescr()?></td>

@@ -74,7 +74,11 @@ print "<LI>{$role}</LI>";
 
 <ul>
 <li><a href="https://nurdspace.nl">Wiki</a></li>
-<li><a href="https://parts.nurdspace.lan/">Partkeepr</a></li>
+<li><a href="/git/">Git repo</a></li>
+<li><a href="/frontend/">Partkeepr</a></li>
+<li><a href="/voipdoos/">VoipDoos</a></li>
+<li><a href="/graphite/">Graphite</a></li>
+<li><a href="/observium/">Observium</a></li>
 <li><a href="https://ldap.nurdspace.nl/">FusionDirectory</a></li>
 <li><a href="/Shibboleth.sso/Logout">Logout</a></li>
 </ul>

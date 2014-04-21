@@ -37,7 +37,7 @@ class Subscription
     }
 
     public function setStartDate($date) {
-        $this->startDate(new DateTime($date));
+        $this->startDate = new DateTime($date);
     }
 
     /**
@@ -52,7 +52,7 @@ class Subscription
     }
 
     public function setEndDate($date) {
-        $this->endDate(new DateTime($date));
+        $this->endDate = new DateTime($date);
     }
 
     /**
@@ -63,7 +63,10 @@ class Subscription
     private $lastInvoiceDate;
 
     public function getLastInvoiceDate() {
-        return $this->lastInvoiceDate->format('Y-m-d');
+        if ($this->lastInvoiceDate != null)
+            return $this->lastInvoiceDate->format('Y-m-d');
+        else
+            return "0000-00-00";
     }
 
     public function setLastInvoiceDate($date) {

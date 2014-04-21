@@ -11,7 +11,7 @@ if (isset($_GET['generate'])){
     $datenow = new DateTime('now');
     $subscriptionsRepo = $entityManager->getRepository('Subscription');
     $qb = $subscriptionsRepo->createQueryBuilder('s');
-    $qb->where('s.endDate = \'0000-00-00\' and s.startDate < :startDate');
+    $qb->where('(s.endDate = \'0000-00-00\' OR s.endDate IS NULL) AND s.startDate < :startDate');
     $qb->setParameter('startDate',$datenow->format('Y-m-d'));
     $subscriptions = $qb->getQuery()->getResult();
     foreach ($subscriptions as $subscription) { 

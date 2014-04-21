@@ -73,6 +73,7 @@ $transactions = $entityManager->getRepository('Transaction')->findBy(array(),arr
 
 foreach ($transactions as $line) {
     $transaction_booked = ($line->getCdtDbt() == "CRDT")?transaction_crdt_booked($line->getId()):false;
+    $transaction_dbit_booked = ($line->getCdtDbt() == "DBIT")?transaction_dbit_booked($line->getId()):false;
     if ((isset($_GET['booked']) && !$transaction_booked) or !isset($_GET['booked'])) {
 ?>
 <tr>
@@ -97,7 +98,7 @@ foreach ($transactions as $line) {
 </td></tr>
 <?
 }
-if ($line->getCdtDbt() == "DBIT" && !$transaction_booked) {?>
+if ($line->getCdtDbt() == "DBIT" && !$transaction_dbit_booked) {?>
 <tr><td colspan="6">
 <nobr>
 <input type="hidden" name="transaction_id[]" value="<?=$line->getId()?>">
