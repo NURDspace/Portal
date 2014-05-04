@@ -1,6 +1,18 @@
 <?
 require("bootstrap.php");
 
+function getMonths($start, $end) {
+    $startParsed = date_parse_from_format('Y-m-d', $start);
+    $startMonth = $startParsed['month'];
+    $startYear = $startParsed['year'];
+
+    $endParsed = date_parse_from_format('Y-m-d', $end);
+    $endMonth = $endParsed['month'];
+    $endYear = $endParsed['year'];
+
+    return ($endYear - $startYear) * 12 + ($endMonth - $startMonth) + 1;
+}
+
 function get_addressbook_by_nick($nick) {
     global $entityManager;
     $addressbook = $entityManager->getRepository('Addressbook')->findOneBy(array('nick' => $nick));

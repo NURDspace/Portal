@@ -48,6 +48,8 @@ class Subscription
     private $endDate;
 
     public function getEndDate() {
+        if ($this->endDate == null)
+            return "0000-00-00";
         return $this->endDate->format('Y-m-d');
     }
 

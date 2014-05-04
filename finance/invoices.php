@@ -11,19 +11,32 @@ if (isset($_GET['generate'])){
     $datenow = new DateTime('now');
     $subscriptionsRepo = $entityManager->getRepository('Subscription');
     $qb = $subscriptionsRepo->createQueryBuilder('s');
-    $qb->where('(s.endDate = \'0000-00-00\' OR s.endDate IS NULL) AND s.startDate < :startDate');
+    $qb->where('s.startDate < :startDate');
     $qb->setParameter('startDate',$datenow->format('Y-m-d'));
     $subscriptions = $qb->getQuery()->getResult();
-    foreach ($subscriptions as $subscription) { 
-        if ($subscription->getLastInvoiceDate() == '-0001-11-30') {
+    foreach ($subscriptions as $subscription) {
+        // Check if subscription has ever been invoiced 
+        if ($subscription->getLastInvoiceDate() == '-0001-11-30' or $subscription->getLastInvoiceDate() == '0000-00-00') {
+            //Use subscription start date as start date
             $_start_date = explode('-',$subscription->getStartDate());
             $last_subs_date = $_start_date[0]."-".($_start_date[1]-1)."-".$_start_date[2];
-        } else
-            $last_subs_date = $subscription->getLastInvoiceDate(); 
-        $diff = abs(strtotime("now") - strtotime($last_subs_date));
-        $years = floor($diff / (365*60*60*24));
-        $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
-        $difference_months = ($years*12)+$months;
+        } else {
+            //Use the last invoice date as start date
+            $last_subs_date = $subscription->getLastInvoiceDate();
+        }
+
+        //Check if enddate is set and fix for invoices that have been closed but never invoiced
+        if ($subscription->getEndDate() == '-0001-11-30' or $subscription->getEndDate() == '0000-00-00') {
+            $end_date = date('Y-m-d');
+        } else {
+            if ($subscription->getLastInvoiceDate() == '-0001-11-30' or $subscription->getLastInvoiceDate() == '0000-00-00') {
+                $end_date = $subscription->getEndDate();
+            } else continue;
+        }
+
+        // Calculate number of months
+        $difference_months = getMonths($last_subs_date,$end_date);
+
         if ($difference_months > 0) {
             for ($i = 1; $i <= $difference_months; $i++) {
                 $last_invoice_date = explode("-",$last_subs_date);
@@ -96,7 +109,7 @@ AddressBook<select name="addressbook_id">
 <h2>Open Invoices</h2>
 <table id="hor-minimalist-b">
 <?
-$invoices = $entityManager->getRepository('Invoice')->findBy(array('paid'=>0),array('date'=>'desc'));
+$invoices = $entityManager->getRepository('Invoice')->findBy(array('paid'=>0),array('date'=>'desc','addressbook'=>'asc'));
 foreach ($invoices as $invoice) {
 ?>
 <tr>
